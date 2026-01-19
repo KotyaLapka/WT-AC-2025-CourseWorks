@@ -5,10 +5,10 @@
     <div class="col-md-4">
       <div class="card">
         {% if playlist.cover_url %}
-        <img src="{{ playlist.cover_url }}" class="card-img-top">
+        <img src="{{ playlist.cover_url }}" class="card-img-top" alt="{{ playlist.title }} cover">
         {% endif %}
         <div class="card-body">
-          <h3>{{ playlist.title }} {% if playlist.collaborators|length > 0 %}<span class="badge bg-info">Collaborative</span>{% endif %}</h3>
+          <h3>{{ playlist.title }} {% if playlist.collaborators|length %}<span class="badge bg-info">Collaborative</span>{% endif %}</h3>
           <p>{{ playlist.description }}</p>
           <h6>Collaborators</h6>
           <ul class="list-group mb-2">
@@ -22,7 +22,7 @@
             {% endfor %}
           </ul>
           {% if current_user.is_authenticated and playlist.user_id == current_user.id %}
-          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#inviteModal">Invite</button>
+          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#invite-modal">Invite</button>
           {% endif %}
         </div>
       </div>
@@ -49,7 +49,7 @@
   </div>
 
   <!-- Invite modal -->
-  <div class="modal fade" id="inviteModal" tabindex="-1">
+  <div class="modal fade" id="invite-modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"><h5 class="modal-title">Invite collaborator</h5></div>
@@ -68,7 +68,7 @@
   </div>
 
   <!-- Import modal -->
-  <div class="modal fade" id="importModal" tabindex="-1">
+  <div class="modal fade" id="import-modal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"><h5 class="modal-title">Import track by URL</h5></div>
@@ -84,7 +84,7 @@
   </div>
 
   <div class="mt-3">
-    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#importModal">Add by link</button>
+  <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#import-modal">Add by link</button>
     <button class="btn btn-outline-secondary" onclick="navigator.clipboard.writeText(window.location.href)">Share</button>
   </div>
 
