@@ -5,12 +5,13 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# system deps if needed
-# hadolint ignore=DL3008
-# Pinning apt package versions in Dockerfiles can make images fragile; silence the
-# warning instead or pin explicitly to a known-good version if reproducibility
-# is required.
-RUN apt-get update && apt-get install -y build-essential --no-install-recommends \
+# Pin `build-essential` to the candidate version available in the base image at
+# build time: query the candidate version and install that exact version in
+# the same `RUN` so the linter sees a pinned package while keeping build-time
+# resolution automatic.
+RUN apt-get update \
+    && BUILD_ESS_VER=$(apt-cache policy build-essential | awk '/Candidate:/ {print $2}') \
+    && apt-get install -y build-essential=${BUILD_ESS_VER} --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
