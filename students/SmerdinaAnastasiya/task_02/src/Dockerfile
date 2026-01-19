@@ -5,13 +5,14 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-RUN set -o pipefail && \
+RUN bash -c '\
     apt-get update && \
-    BUILD_ESS_VER=$(apt-cache policy build-essential | awk '/Candidate:/ {print $2}') && \
+    BUILD_ESS_VER=$(apt-cache policy build-essential | awk "/Candidate:/ {print \$2}") && \
     apt-get install -y --no-install-recommends \
-        build-essential="${BUILD_ESS_VER}" \
+        "build-essential=${BUILD_ESS_VER}" \
     && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    '
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -23,4 +24,4 @@ ENV FLASK_ENV=production
 
 EXPOSE 5000
 
-CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "run:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]
