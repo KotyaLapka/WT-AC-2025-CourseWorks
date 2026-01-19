@@ -6,6 +6,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # system deps if needed
+# hadolint ignore=DL3008
+# Pinning apt package versions in Dockerfiles can make images fragile; silence the
+# warning instead or pin explicitly to a known-good version if reproducibility
+# is required.
 RUN apt-get update && apt-get install -y build-essential --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
